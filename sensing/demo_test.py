@@ -4,7 +4,10 @@ import time
 import numpy as np
 import easyocr
 import asyncio
+from jamo import h2j, j2hcj
+import brailleTable
 # import RPi.GPIO as GPIO
+# from picamera import PiCamera
 
 mode = 0
 
@@ -15,9 +18,15 @@ def toggleMode():
   if mode == 0:
       mode = 1
       print(mode)
+      Boom("101010")
+      time.sleep(0.3)
+      Boom("101010")
   else:
       mode = 0
       print(mode)
+      Boom("010101")
+      time.sleep(0.3)
+      Boom("101010")
     
 
 # Direction check
@@ -32,13 +41,13 @@ def checkDir(direction):
 
 
 # Send stimulation
-def sendStimul(power, arr):
+async def sendStimul(power, arr):
   last = power
   for i in range(3):
     if last > 0:
       Boom(arr) # to be continued
       last = last - 1
-    time.sleep(0.3)
+    asyncio.sleep(0.3)
 
 
 # Boom !!
@@ -49,6 +58,7 @@ def Boom(arr):
 
 # Alert Function
 async def sendAlert(distance, direction):
+  # Distance define
   distance_short = -0.5
   distance_middle = -0.3
   distance_long = -0.1
@@ -56,11 +66,11 @@ async def sendAlert(distance, direction):
   dir = checkDir(direction)
   if dir != 0:
     if distance < distance_short:
-      sendStimul(3,dir)
+      await sendStimul(3,dir)
     elif distance < distance_middle:
-      sendStimul(2,dir)
+      await sendStimul(2,dir)
     elif distance < distance_long:
-      sendStimul(1,dir)
+      await sendStimul(1,dir)
 
 
  
@@ -126,10 +136,10 @@ with mp_pose.Pose(
     # To improve performance, optionally mark the image as not writeable to
     # pass by reference.
     image.flags.writeable = False
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     
     
     if mode == 0:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = pose.process(image)
         # Draw the pose annotation on the image.
         image.flags.writeable = True
@@ -158,11 +168,26 @@ with mp_pose.Pose(
     
     if mode == 1:
         result_ocr = reader.readtext(image)
-        print(result_ocr)
+        width = [result_ocr[i][0][1][0]-result_ocr[i][0][0][0] for i in range(len(result_ocr))]
+        height = [result_ocr[i][0][2][1]-result_ocr[i][0][0][1] for i in range(len(result_ocr))]
+        print(width)
+        print(height)
+
+        # title select
+        if len(result_ocr) > 0:
+          biggest = np.argmax(height)
+          title = result_ocr[biggest][1]
+          print(title)
+          title_filtered = ''.join(char for char in title if char.isalnum())
+          print(title_filtered)
+          jamo_str = j2hcj(h2j(title_filtered))
+          print(jamo_str)
+          brailleTable.alertKorean(jamo_str)
 
 
-        
-      
+
+    
+    
     cv2.imshow('Sixth Sense - Team Boyjo No.1', cv2.flip(image, 1))
     if cv2.waitKey(5) & 0xFF == 27:
       break
