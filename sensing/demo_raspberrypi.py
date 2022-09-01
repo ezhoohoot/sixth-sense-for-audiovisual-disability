@@ -9,6 +9,7 @@ import brailleTable_pi
 from bluetooth import *
 
 socket = BluetoothSocket( RFCOMM )
+# Modify the MAC address for your device
 socket.connect(("98:D3:51:FD:E4:0C", 1))
 # import RPi.GPIO as GPIO
 # from picamera import PiCamera
