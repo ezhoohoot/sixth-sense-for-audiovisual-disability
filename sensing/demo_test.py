@@ -161,7 +161,7 @@ with mp_pose.Pose(
           if timeNow-startTime > 1.2:
               startTime = timeNow
               # print("distance : " , round(np.mean(arr), 3))
-              print(results.pose_landmarks.landmark[0].z)
+              print(results.pose_world_landmarks.landmark[0].z)
               print(results.pose_landmarks.landmark[0].x)
               asyncio.run(sendAlert(results.pose_landmarks.landmark[0].z, results.pose_landmarks.landmark[0].x))
     
