@@ -1,10 +1,4 @@
 import time
-import serial
-
-ser = serial.Serial(
-    port='COM9',
-    baudrate=115200,
-)
 # Send stimulation
 def sendKorean(arr):
     Boom2(arr) # to be continued

@@ -1,3 +1,7 @@
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 import cv2
 import mediapipe as mp
 import time
@@ -5,15 +9,16 @@ import numpy as np
 import easyocr
 import asyncio
 from jamo import h2j, j2hcj
-import brailleTable
-import serial
+import brailleTable, bluetooth_test
+from bluetooth_test import Boom
+# import serial
 
-ser = serial.Serial(
-    port='COM9',
-    baudrate=115200,
-)
+# ser = serial.Serial(
+#     port='COM3',
+#     baudrate=115200,
+# )
 
-mode = 1
+mode = 0
 
 signal = 0
 
@@ -54,11 +59,11 @@ async def sendStimul(power, arr):
     asyncio.sleep(0.3)
 
 
-# Boom !!
-def Boom(arr):
-  print(arr)
-  ser.write(arr.encode())
-  return
+# # Boom !!
+# def Boom(arr):
+#   print(arr)
+#   ser.write(arr.encode())
+#   return
 
 
 # Alert Function
