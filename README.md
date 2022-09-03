@@ -35,9 +35,13 @@ git clone https://github.com/ezhoohoot/sixth-sense-for-audiovisual-disability.gi
 아나콘다 가상환경 이용을 권장드립니다.
 
 conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+
 pip install opencv-python
+
 pip install mediapipe
+
 pip install easyocr
+
 pip install jamo
 
 # 오류가 발생하는 경우, 아래 커맨드를 실행해주세요.
