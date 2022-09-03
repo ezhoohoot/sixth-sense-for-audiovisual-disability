@@ -6,8 +6,12 @@ import easyocr
 import asyncio
 from jamo import h2j, j2hcj
 import brailleTable
-# import RPi.GPIO as GPIO
-# from picamera import PiCamera
+import serial
+
+ser = serial.Serial(
+    port='COM9',
+    baudrate=115200,
+)
 
 mode = 1
 
@@ -52,7 +56,8 @@ async def sendStimul(power, arr):
 
 # Boom !!
 def Boom(arr):
-  print("Boom !!", arr)
+  print(arr)
+  ser.write(arr.encode())
   return
 
 
@@ -72,32 +77,6 @@ async def sendAlert(distance, direction):
     elif distance < distance_long:
       await sendStimul(1,dir)
 
-
- 
-
-
-# # event interrupt
-# GPIO.add_event_detect(20, GPIO.FALLING, callback=toggleMode)
-
-# class InterruptExecution (Exception):
-#     pass
-
-# def function_a():
-#     while some_condition_is_true():
-#         do_something()
-#         if callback_time():
-#             try:
-#                 function_b()
-#             except InterruptExecution:
-#                 break
-#         do_something_else()
-#     do_final_stuff()
-
-
-# def function_b():
-#     do_this_and_that()
-#     if interruption_needed():
-#         raise (InterruptExecution('Stop the damn thing'))
 
 
 
