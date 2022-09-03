@@ -47,8 +47,11 @@ pip install jamo
 # 오류가 발생하는 경우, 아래 커맨드를 실행해주세요.
 
 pip uninstall opencv-python
+
 pip uninstall opencv-python-headless
+
 pip install opencv-python
+
 pip install opencv-python-headless
 
 # 라즈베리파이의 블루투스 통신은 아래 링크를 참고해주세요.
